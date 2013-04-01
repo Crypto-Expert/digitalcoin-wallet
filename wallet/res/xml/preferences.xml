@@ -45,8 +45,8 @@
 			android:entries="@array/preferences_precision_labels"
 			android:entryValues="@array/preferences_precision_values"
 			android:key="btc_precision"
-			android:summary="This does not affect computations. It is used for saving view space only."
-			android:title="Precision of Bitcoin values" />
+			android:summary="Unit to show amounts in. This does not affect computations."
+			android:title="Denomination and precision" />
 
 		<CheckBoxPreference
 			android:defaultValue="true"

@@ -43,9 +43,6 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.format.DateUtils;
-
-import com.google.bitcoin.core.Utils;
-
 import de.schildbach.wallet.util.GenericUtils;
 import de.schildbach.wallet.util.Io;
 
@@ -70,7 +67,7 @@ public class ExchangeRatesProvider extends ContentProvider
 		@Override
 		public String toString()
 		{
-			return getClass().getSimpleName() + '[' + currencyCode + ':' + GenericUtils.formatValue(rate, Constants.BTC_MAX_PRECISION) + ']';
+			return getClass().getSimpleName() + '[' + currencyCode + ':' + GenericUtils.formatValue(rate, Constants.BTC_MAX_PRECISION, 0) + ']';
 		}
 	}
 
@@ -237,7 +234,7 @@ public class ExchangeRatesProvider extends ContentProvider
 						{
 							try
 							{
-								rates.put(currencyCode, new ExchangeRate(currencyCode, Utils.toNanoCoins(rate), URL.getHost()));
+								rates.put(currencyCode, new ExchangeRate(currencyCode, GenericUtils.toNanoCoins(rate, 0), URL.getHost()));
 							}
 							catch (final ArithmeticException x)
 							{
@@ -296,7 +293,7 @@ public class ExchangeRatesProvider extends ContentProvider
 					{
 						try
 						{
-							rates.put(currencyCode, new ExchangeRate(currencyCode, Utils.toNanoCoins(rate), URL.getHost()));
+							rates.put(currencyCode, new ExchangeRate(currencyCode, GenericUtils.toNanoCoins(rate, 0), URL.getHost()));
 						}
 						catch (final ArithmeticException x)
 						{

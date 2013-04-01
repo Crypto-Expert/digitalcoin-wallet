@@ -193,14 +193,22 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		if (from != null && !notificationAddresses.contains(from))
 			notificationAddresses.add(from);
 
-		final int precision = Integer.parseInt(prefs.getString(Constants.PREFS_KEY_BTC_PRECISION, Constants.PREFS_DEFAULT_BTC_PRECISION));
+		final String precision = prefs.getString(Constants.PREFS_KEY_BTC_PRECISION, Constants.PREFS_DEFAULT_BTC_PRECISION);
+		final int btcPrecision = precision.charAt(0) - '0';
+		final int btcShift = precision.length() == 3 ? precision.charAt(2) - '0' : 0;
 
 		final String packageFlavor = application.applicationPackageFlavor();
 		final String msgSuffix = packageFlavor != null ? " [" + packageFlavor + "]" : "";
+		
+		
+		
+		// HIER MUSS NOCH DAS PREFIX GEAENDERT WERDEN!!
+		
+		final String tickerMsg = getString(R.string.notification_coins_received_msg, GenericUtils.formatValue(amount, btcPrecision, btcShift))
+				+ msgSuffix;
 
-		final String tickerMsg = getString(R.string.notification_coins_received_msg, GenericUtils.formatValue(amount, precision)) + msgSuffix;
-
-		final String msg = getString(R.string.notification_coins_received_msg, GenericUtils.formatValue(notificationAccumulatedAmount, precision))
+		final String msg = getString(R.string.notification_coins_received_msg,
+				GenericUtils.formatValue(notificationAccumulatedAmount, btcPrecision, btcShift))
 				+ msgSuffix;
 
 		final StringBuilder text = new StringBuilder();
