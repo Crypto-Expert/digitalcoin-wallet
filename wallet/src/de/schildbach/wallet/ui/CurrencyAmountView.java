@@ -36,22 +36,18 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.google.bitcoin.core.Transaction;
 
 import de.schildbach.wallet.Constants;
 import de.schildbach.wallet.util.GenericUtils;
 import de.schildbach.wallet.util.WalletUtils;
-import de.schildbach.wallet.digitalcoin.R;
-
+import hashengineering.digitalcoin.wallet.R;
 
 /**
  * @author Andreas Schildbach
@@ -62,16 +58,14 @@ public final class CurrencyAmountView extends FrameLayout
 	{
 		void changed();
 
-		void done();
-
 		void focusChanged(final boolean hasFocus);
 	}
 
 	private int significantColor, lessSignificantColor, errorColor;
 	private Drawable deleteButtonDrawable, contextButtonDrawable;
 	private Drawable currencySymbolDrawable;
-	private int inputPrecision = 0;
-	private int hintPrecision = 0;
+	private int inputPrecision = 2;
+	private int hintPrecision = 2;
 	private int shift = 0;
 	private boolean amountSigned = false;
 	private boolean smallerInsignificant = true;
@@ -119,7 +113,6 @@ public final class CurrencyAmountView extends FrameLayout
 		setValidateAmount(textView instanceof EditText);
 		textView.addTextChangedListener(textViewListener);
 		textView.setOnFocusChangeListener(textViewListener);
-		textView.setOnEditorActionListener(textViewListener);
 
 		contextButton = new View(context)
 		{
@@ -146,6 +139,10 @@ public final class CurrencyAmountView extends FrameLayout
 		else if (Constants.CURRENCY_CODE_MBTC.equals(currencyCode))
 		{
 			currencySymbolDrawable = getResources().getDrawable(R.drawable.currency_symbol_mbtc);
+		}
+		else if (Constants.CURRENCY_CODE_UBTC.equals(currencyCode))
+		{
+			currencySymbolDrawable = getResources().getDrawable(R.drawable.currency_symbol_ubtc);
 		}
 		else if (currencyCode != null)
 		{
@@ -231,12 +228,8 @@ public final class CurrencyAmountView extends FrameLayout
 
 	public void setHint(@Nullable final BigInteger amount)
 	{
-		final SpannableStringBuilder hint;
-		if (amount != null)
-			hint = new SpannableStringBuilder(GenericUtils.formatValue(amount, hintPrecision, shift));
-		else
-			hint = new SpannableStringBuilder("0.00");
-
+		final SpannableStringBuilder hint = new SpannableStringBuilder(GenericUtils.formatValue(amount != null ? amount : BigInteger.ZERO,
+				hintPrecision, shift));
 		WalletUtils.formatSignificant(hint, smallerInsignificant ? WalletUtils.SMALLER_SPAN : null);
 		textView.setHint(hint);
 	}
@@ -264,6 +257,17 @@ public final class CurrencyAmountView extends FrameLayout
 			textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 		else
 			textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+	}
+
+	public TextView getTextView()
+	{
+		return textView;
+	}
+
+	public void setNextFocusId(final int nextFocusId)
+	{
+		textView.setNextFocusDownId(nextFocusId);
+		GenericUtils.setNextFocusForwardId(textView, nextFocusId);
 	}
 
 	private boolean isValidAmount(final boolean zeroIsValid)
@@ -361,7 +365,7 @@ public final class CurrencyAmountView extends FrameLayout
 
 	private final TextViewListener textViewListener = new TextViewListener();
 
-	private final class TextViewListener implements TextWatcher, OnFocusChangeListener, OnEditorActionListener
+	private final class TextViewListener implements TextWatcher, OnFocusChangeListener
 	{
 		private boolean fire = true;
 
@@ -410,15 +414,6 @@ public final class CurrencyAmountView extends FrameLayout
 
 			if (listener != null && fire)
 				listener.focusChanged(hasFocus);
-		}
-
-		@Override
-		public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event)
-		{
-			if (actionId == EditorInfo.IME_ACTION_DONE && listener != null && fire)
-				listener.done();
-
-			return false;
 		}
 	}
 

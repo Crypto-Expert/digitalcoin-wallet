@@ -2,8 +2,8 @@ digitalcoin'leriniz daima cebinizde sizinle olsun! Herhangi bir QR kodunu okuyar
 
 İŞLEVLERİ:
 • Hiçbir oturuma, web ya da bulut hizmetine gerek yoktur. Bu cüzdan merkezsiz ve eşten eşedir.
-• digitalcoin meblağlarının BTC ve mBTC olarak gösterilmesi.
-• Dövizlere ve dövizlerden dönüştürme.
+• digitalcoin meblağlarının DGC ve mDGC olarak gösterilmesi.
+• Ulusal para birimlerine ve bu para birimlerinden dönüştürme.
 • NFC, QR kodu veya digitalcoin bağlantıları ile digitalcoin gönderir ve alır.
 • Sık kullanılan digitalcoin adresleri için adres defteri içerir.
 • Çevrimdışı olduğunuzda Bluetooth vasıtasıyla ödemeler.
