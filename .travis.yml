@@ -33,7 +33,7 @@ script:
 notifications:
   irc:
     channels:
-      - "chat.freenode.net#cryptopools"
+      - "chat.freenode.net#digitalcoin-dev"
     template:
       - "%{repository}/%{branch} (%{commit} - %{author}): %{message}, Result: %{result}, Build Time: %{duration}"
       - "Change view : %{compare_url}"
